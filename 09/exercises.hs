@@ -18,23 +18,56 @@ pythagCurried x y = sqrt (x**2 + y**2)
 -- Likewise, there's also "uncurry" which takes R -> R -> R to (R, R) -> R
 -- Check ":t curry" and ":t uncurry" for more information
 
-displayMode :: Display
-displayMode = InWindow "Axes" (1000, 700) (10, 10)
+-- Ex. 1
+polarToCart :: (R, R) -> (R, R)
+-- Takes as input (r, theta), theta in radians -> (x, y) Cartesian
+polarToCart (r, t) = (r * cos t, r * sin t)
 
-disk :: Float -> Picture
-disk radius = ThickCircle (radius / 2) radius
+-- Ex. 2
+-- See above explanation on curry/uncurry
 
-redDisk :: Picture
-redDisk = Color red (disk 25)
+-- Ex. 3
+headSafe :: [a] -> Maybe a
+headSafe [] = Nothing
+headSafe (x:_) = Just x
 
-projectileMotion :: Float -> Picture
-projectileMotion t = Translate (xDisk t) (yDisk t) redDisk
+-- Ex. 4
+maybeToList :: Maybe a -> [a]
+maybeToList x = case x of
+    Nothing     -> []
+    Just x      -> [x]
 
-xDisk :: Float -> Float
-xDisk t = 40 * t
+-- Ex. 5
+-- When two lists with different lenghts are zipped together, the longer one is 
+-- truncated to the length of the shorter. 
 
-yDisk :: Float -> Float
-yDisk t = 80 * t - 4.9 * t**2
+-- Ex. 6
+zip' :: ([a], [b]) -> [(a,b)] -- Use curry or uncurry
+zip' (xs, ys) = [ (x, y) | 
+
+delineate :: IO ()
+delineate = putStrLn ""
 
 main :: IO ()
-main = animate displayMode black projectileMotion
+main = do
+    delineate
+    putStrLn "Exercise 1"
+    putStrLn . show $ polarToCart (5, 2)
+
+    delineate
+    putStrLn "Exercise 2"
+    putStrLn "In code file."
+    
+    delineate
+    putStrLn "Exercise 3"
+    putStrLn . show $ headSafe [4]
+    putStrLn . show $ (if headSafe [] /= Just 4 then "Nothing!" else "Incorrect!")
+
+    delineate
+    putStrLn "Exercise 4"
+    putStrLn . show . maybeToList $ headSafe [4]
+    putStrLn . show . maybeToList $ headSafe ["Nothing would be here"]
+
+    delineate
+    putStrLn "Exercise 5"
+    
